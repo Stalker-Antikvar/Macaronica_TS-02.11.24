@@ -2,14 +2,12 @@ async function upblock()
 {
     await document.querySelectorAll(".Block_1_2").forEach(i => {
         i.querySelectorAll(".Text").forEach(i2 => {
-            if ((i.dataset.multiplier) == "Tex_2") {
+            if ((i.dataset.multiplier) == "none") {
                 i2.textContent = i.dataset.name;
-            } else if (parseInt(i.dataset.multiplier) != 0) {
-                i2.textContent = ((i.dataset.name) + " - " + (i.dataset.quantity) + " уп (" + ((i.dataset.quantity) * parseInt(i.dataset.multiplier)) +"шт)");
-            } else if (parseInt(i.dataset.multiplier) != 0 && parseInt(i.dataset.quantity) == 0) {
-                i2.textContent = ((i.dataset.name) + " - " + (i.dataset.quantity) + " уп \n");
+            } else if ((i.dataset.multiplier) == 0) {
+                i2.textContent = (i.dataset.name) + " - " + (i.dataset.quantity) + " " + (i.dataset.prefix);
             } else {
-                i2.textContent= ((i.dataset.name) + " - " + (i.dataset.quantity) + "\n");
+                i2.textContent = (i.dataset.name) + " - " + (i.dataset.quantity) + " " + (i.dataset.prefix) + " (" + ((i.dataset.quantity) * parseInt(i.dataset.multiplier)) +"шт)";
             };
         });
     });
@@ -53,22 +51,42 @@ document.querySelectorAll(".button").forEach(i => {
 document.getElementById("button_2_id").addEventListener("click", function() {
     var copytext = "";
     document.querySelectorAll(".Block_1_2").forEach(i => {
-        if (i.dataset.multiplier == "Tex_1") {
+        if ((i.dataset.multiplier == "none") && ((i.style.display) == "none")) {
             copytext += "  " + (i.dataset.name) + "\n";
-        } else if (i.dataset.multiplier == "Tex_2") {
+        } else if (i.dataset.multiplier == "none") {
             copytext += "\n";
-        } else if (parseInt(i.dataset.multiplier) != 0 && parseInt(i.dataset.quantity) != 0) {
-            copytext += ((i.dataset.name) + " - " + (i.dataset.quantity) + " уп (" + ((i.dataset.quantity) * parseInt(i.dataset.multiplier)) +"шт) \n");
-        } else if (parseInt(i.dataset.multiplier) != 0 && parseInt(i.dataset.quantity) == 0) {
-            copytext += ((i.dataset.name) + " - " + (i.dataset.quantity) + " уп \n");
-        } else if (parseInt(i.dataset.multiplier) == 0 && parseInt(i.dataset.quantity) > 0) {
-            copytext += ((i.dataset.name) + " - " + (i.dataset.quantity) + "\n");
+        } else if (i.dataset.priority > 0) {
+            if (i.dataset.quantity != 0 && (i.dataset.multiplier != 0)) {
+                copytext += (i.dataset.name) + " - " + (i.dataset.quantity) + " " + (i.dataset.prefix) + " (" + ((i.dataset.quantity) * parseInt(i.dataset.multiplier)) +"шт)" + "\n";
+            } else {
+                copytext += (i.dataset.name) + " - " + (i.dataset.quantity) + " " + (i.dataset.prefix) + "\n";
+            };
+        } else if ((i.dataset.priority == 0) && (i.dataset.quantity != 0)) {
+            if (i.dataset.multiplier != 0) {
+                copytext += (i.dataset.name) + " - " + (i.dataset.quantity) + " " + (i.dataset.prefix) + " (" + ((i.dataset.quantity) * parseInt(i.dataset.multiplier)) +"шт)" + "\n";
+            } else {
+                copytext += (i.dataset.name) + " - " + (i.dataset.quantity) + " " + (i.dataset.prefix) + "\n";
+            };
         };
     });
     try {
         navigator.clipboard.writeText(copytext);
     } catch {};
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 document.addEventListener("DOMContentLoaded", async function() {
     typeWriter();
